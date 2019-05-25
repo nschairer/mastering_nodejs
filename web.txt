@@ -1,0 +1,14 @@
+How does the web work?
+
+User client -> enters url -> domain lookup for server -> request to server
+
+node.js runs on server which has the ip address the client makes a req too
+
+server sends a response -- HTML,JSON,XML etc. pretty much anything
+
+
+Standardized way of communicating in the internet
+- HTTP - hyper text transfer protocol
+      - standard for transferring data understood by browser and server
+- HTTPS - HTTP Secure
+        - Adds data encryption during transmission
