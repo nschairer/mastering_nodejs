@@ -14,6 +14,10 @@ Streams and buffers
 stream - req body 1 req body 2 .... req body n -> fully parsed
 -- file uploads etc - all req handled this way
 
+npm start -works without run
+npm run <script name>
+.gitignore --- ** wildcard to ignore all instances of something
+
 */
 const http = require('http');
 const routes = require('./routes');

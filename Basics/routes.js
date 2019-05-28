@@ -4,7 +4,7 @@ const requestHandler = (req, res) => {
     const url = req.url;
     const method = req.method;
     if (url === '/') {
-        res.write('<html><head><title>Server</title></head><body><form action="/message" method="POST"><input name="message" type="text"><button type="submit">send</button></form></body></html>');
+        res.write('<html><head><title>Node Basics</title></head><body><form action="/message" method="POST"><input name="message" type="text"><button type="submit">send</button></form></body></html>');
         return res.end();
       }
       if (url === '/message' && method === 'POST') {

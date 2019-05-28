@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/Basics/createAServer.js"
+            "program": "${workspaceFolder}/Basics/app.js"
         }
     ]
 }
