@@ -1,21 +1,17 @@
 const express = require('express');
-
+const bodyParser = require('body-parser');
 const app = express();
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-app.use('/', (req, res, next) => {
-    console.log('This always runs!');
-    next();
-})
+//ORDER MATTERS --- TOP TO BOTTOM WITH MIDDLEWARE
+app.use(bodyParser.urlencoded({ extended: false }));
+//places admin ahead of every route in adminRoutes
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
 
-app.use('/add-product', (req, res, next) => {
-    console.log('product middleware')
-    res.send('add products!');
-});
-
-
-app.use('/', (req, res, next) => {
-    console.log('in home page')
-    res.send('hello from the final middleware!');
+app.use((req, res, next) => {
+    res.status(404).send('<h1>404 Page not found</h1>')
 });
 
 app.listen(3000, () => {console.log('server running on port 3000')});
