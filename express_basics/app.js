@@ -15,8 +15,9 @@ app.set('view engine', 'ejs');
 //defaults to views anyways
 app.set('views', 'views')
 
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 //ORDER MATTERS --- TOP TO BOTTOM WITH MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,13 +25,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //places admin ahead of every route in adminRoutes
-app.use('/admin',adminData.routes);
+app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-    //res.status(404).sendFile(path.join(__dirname,'views','404.html'));
-    console.log('Page not found')
-    res.status(404).render('404', {pageTitle: 'Page Not Found'})
-});
+app.use(errorController.get404);
 
 app.listen(3000, () => {console.log('server running on port 3000')});
