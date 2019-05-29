@@ -1,0 +1,11 @@
+<%- include('includes/start.ejs')%>
+</head>
+<body>
+    <a href="/">Home</a>
+    <ul>
+        <% for (let user of users) { %>
+        <li><%= user %></li>
+        <% } %>
+    </ul>
+</body>
+</html>

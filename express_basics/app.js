@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const expressHbs = require('express-handlebars');
+
+//handlebars
+//const expressHbs = require('express-handlebars');
 
 const app = express();
 

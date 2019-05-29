@@ -1,0 +1,11 @@
+<%- include('./includes/start.ejs') %>
+</head>
+<body>
+    <%- include('./includes/title.ejs') %>
+    <a href="/users">users</a>
+    <form action="/users", method="POST">
+        <input type="text" name="name">
+        <button type="submit">Add name</button>
+    </form>
+</body>
+</html>
