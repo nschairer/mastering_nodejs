@@ -27,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //places admin ahead of every route in adminRoutes
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
-
 app.use(errorController.get404);
 
 app.listen(3000, () => {console.log('server running on port 3000')});

@@ -6,8 +6,6 @@ const productsController = require('../controllers/products');
 
 // const adminData = require('./admin')
 // const rootDir = require('../utils/path');
-
-
 router.get('/', productsController.getProducts);
 
 module.exports = router;
