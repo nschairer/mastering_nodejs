@@ -4,13 +4,15 @@ const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
     console.log('GET PRODUCTS ROUTE')
-    Product.fetchAll(products => {
+    Product.fetchAll()
+    .then(([rows, fieldData]) => {
         res.render('shop/product-list', {
-            prods: products, 
+            prods: rows, 
             pageTitle: 'All Products', 
             path: '/products'
-        });
-    });
+        })
+    })
+    .catch(e => console.log(e))
     //can't use ../ cause / refers to root folder on OS not project for web    
     //STATIC
     //res.sendFile(path.join(rootDir,'views','shop.html'));
@@ -21,21 +23,24 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
     console.log('GET PRODUCT ' + prodId);
-    Product.findById(prodId, product => {
-        console.log(product);
-        res.render('shop/product-detail', {pageTitle: product.title, product: product, path: '/products'})
-    });
+    Product.findById(prodId)
+    .then(([product]) => {
+        res.render('shop/product-detail', {pageTitle: product.title, product: product[0], path: '/products'})
+    })
+    .catch(e => console.log(e));
 }
 
 exports.getIndex = (req, res, next) => {
     console.log('GET INDEX ROUTE')
-    Product.fetchAll(products => {
+    Product.fetchAll()
+    .then(([rows, fieldData]) => {
         res.render('shop/index', {
-            prods: products, 
+            prods: rows, 
             pageTitle: 'Shop', 
             path: '/'
         });
-    });
+    })
+    .catch(e => console.log(e))
 }
 
 exports.postCart = (req, res, next) => {
