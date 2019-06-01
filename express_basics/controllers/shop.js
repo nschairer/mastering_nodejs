@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-
+const Cart = require('../models/cart');
 
 
 exports.getProducts = (req, res, next) => {
@@ -18,6 +18,15 @@ exports.getProducts = (req, res, next) => {
     //TEMPLATING -- defined templating engine so just file name w/o extension
 }
 
+exports.getProduct = (req, res, next) => {
+    const prodId = req.params.productId;
+    console.log('GET PRODUCT ' + prodId);
+    Product.findById(prodId, product => {
+        console.log(product);
+        res.render('shop/product-detail', {pageTitle: product.title, product: product, path: '/products'})
+    });
+}
+
 exports.getIndex = (req, res, next) => {
     console.log('GET INDEX ROUTE')
     Product.fetchAll(products => {
@@ -27,6 +36,16 @@ exports.getIndex = (req, res, next) => {
             path: '/'
         });
     });
+}
+
+exports.postCart = (req, res, next) => {
+    console.log('POST TO CART');
+    const prodId = req.body.productId
+    Product.findById(prodId, (product) => {
+        Cart.addProduct(prodId, product.price);
+    });
+    console.log(prodId)
+    res.redirect('/cart')
 }
 
 exports.getCart = (req, res, next) => {
