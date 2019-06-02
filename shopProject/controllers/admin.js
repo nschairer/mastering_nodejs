@@ -39,12 +39,13 @@ exports.postEditProduct = (req, res, next) => {
     const updatedPrice = req.body.price;
     const updatedImageUrl = req.body.imageUrl;
     const updatedDesc = req.body.description;
+    console.log(updatedDesc)
     Product.findByPk(prodId)
     .then(product => {
         product.title = updatedTitle;
         product.price = updatedPrice;
         product.imageUrl = updatedImageUrl;
-        product.updatedDesc = updatedDesc;
+        product.description = updatedDesc;
         return product.save();
     })
     .then(result => {
