@@ -1,74 +1,52 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
+const getDb = require('../utils/database').getDb;
 
-const sequelize = require('../utils/database');
-
-//defining table schema
-const Product = sequelize.define('product', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    price: {
-        type: Sequelize.DOUBLE,
-        allowNull: false
-    },
-    imageUrl: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
+class Product {
+    constructor(title,price,description,imageUrl) {
+        this.title = title;
+        this.price = price;
+        this.description = description
+        this.imageUrl = imageUrl
     }
-})
+
+
+    save() {
+        const db = getDb();
+        return db.collection('products')
+        .insertOne(this)
+        .then(result => {
+            console.log(result)
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
+    static fetchAll() {
+        const db = getDb();
+        return db.collection('products').find().toArray()
+        .then(products => {
+            console.log(products)
+            return products
+        })
+        .catch(e => {
+            console.log(e)
+        });
+    }
+
+    static findById(prodId) {
+        const db = getDb()
+        return db.collection('products').find({_id: mongodb.ObjectId(prodId)}).next()
+        .then(product => {
+            console.log(product)
+            return product
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
+}
+
 
 module.exports = Product;
-
-
-
-
-
-
-
-// const db = require('../utils/database');
-// const Cart = require('./Cart');
-
-// module.exports = class Product {
-//     constructor(id, title, imageUrl, description, price) {
-//         this.id = id;
-//         this.title = title;
-//         this.imageUrl = imageUrl;
-//         this.description = description;
-//         this.price = price;
-//     }
-
-//     save() {
-//         //? removes hidden sql commands
-//         return db.execute(
-//             'insert into products (title, price, imageUrl, description) values (?, ?, ?, ?)',
-//             [this.title, this.price, this.imageUrl, this.description]
-//         )
-//         //have to use arrow function to refer to this
-//     }
-
-//     static deleteById(id) {
-        
-//     }
-
-//     //static means calling on the class itself, not an instantiated product
-//     static fetchAll() {
-//         return db.execute('select * from products')
-//     }
-
-//     static findById(id) {
-//         //? lets mysql inject value to avoid hacks
-//         return db.execute('select * from products where products.id = ?', [id]);
-//     }
-
-// }
