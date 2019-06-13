@@ -43,37 +43,17 @@ exports.getIndex = (req, res, next) => {
 exports.postCart = (req, res, next) => {
      console.log('POST TO CART');
      const prodId = req.body.productId
-     let fetchedCart;
-     let newQuantity = 1;
-     req.user
-     .getCart()
-     .then(cart => {
-         fetchedCart = cart
-        return cart.getProducts({where: {id: prodId}})
+     Product.findById(prodId)
+     .then(product => {
+         return req.user.addToCart(product);
      })
-     .then(products => {
-         let product;
-         if(products.length > 0) {
-            product = products[0]
-         }
-         if(product) {
-             const oldQuantity = product.cartItem.quantity;
-             newQuantity = oldQuantity + 1
-             return product;
-         }
-         return Product.findByPk(prodId)
-    })
-    .then(product => {
-        return fetchedCart.addProduct(product, {
-            through: { quantity: newQuantity }
-        })
-    })
-    .then(() => {
-        res.redirect('/cart');
-    })
-    .catch(e => {
-        console.log(e)
-    })
+     .then(result => {
+         console.log(result)
+         res.redirect('/cart')
+     })
+     .catch(e => {
+         console.log(e)
+     })
 }
 
 exports.postDelteProduct = (req, res, next) => {
@@ -95,28 +75,10 @@ exports.postDelteProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
     console.log('GET CART ROUTE')
-    // Cart.getCart(cart => {
-    //     Product.fetchAll(products => {
-    //         const cartProducts = [];
-    //         for (product of products) {
-    //             const cartProductData = cart.products.find(prod => prod.id === product.id)
-    //             if(cartProductData) {
-    //                 cartProducts.push({productData: product, qty: cartProductData.qty})
-    //             }
-    //         }
-
-    //         res.render('shop/cart', {
-    //             path: '/cart',
-    //             pageTitle: 'Your Cart',
-    //             products: cartProducts
-    //         })
-    //     })
-    // })
-    req.user.getCart()
-    .then(cart => {
-        return cart.getProducts();
-    })
+    req.user
+    .getCart()
     .then(products => {
+        console.log(products)
         res.render('shop/cart', {
             path: '/cart',
             pageTitle: 'Your Cart',
