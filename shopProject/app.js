@@ -10,6 +10,7 @@ app.set('views', 'views')
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
+const authRoutes = require('./routes/auth');
 const User = require('./models/user');
 
 //ORDER MATTERS --- TOP TO BOTTOM WITH MIDDLEWARE
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 //places admin ahead of every route in adminRoutes
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes)
 app.use(errorController.get404);
 
 mongoose.connect(config.uri, {useNewUrlParser: true})
