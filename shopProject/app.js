@@ -2,8 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
 const config = require('./config/mongo');
 const app = express();
+const store = new MongoDBStore({
+    uri: config.uri,
+    collection: 'sessions'
+})
+
 app.set('view engine', 'ejs');
 app.set('views', 'views')
 
@@ -18,12 +25,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //grants read access to path --- when routing in html ignore public and just use /css
 app.use(express.static(path.join(__dirname, 'public')));
 
-//access user across app
-app.use((req, res, next) => {
-    User.findById('5d29409deda95a3fa69b2db5')
+app.use(session({
+    secret: '1320948iujafksj%dnfaskafdkm$',
+    resave: false,
+    saveUninitialized: false,
+    store: store
+}))
+
+app.use((req,res,next) => {
+    if(!req.session.user) {
+       return next()
+    }
+    User.findById(req.session.user._id)
     .then(user => {
+        //makes mongoose model available to all requests
         req.user = user;
-        next();
+        next()
     })
     .catch(e => {
         console.log(e)
