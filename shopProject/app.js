@@ -5,11 +5,15 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const config = require('./config/mongo');
+const csurf = require('csurf')
+
+
 const app = express();
 const store = new MongoDBStore({
     uri: config.uri,
     collection: 'sessions'
 })
+const csrfProtection = csurf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views')
@@ -31,6 +35,8 @@ app.use(session({
     saveUninitialized: false,
     store: store
 }))
+
+app.use(csrfProtection)
 
 app.use((req,res,next) => {
     if(!req.session.user) {
